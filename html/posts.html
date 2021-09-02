@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles.css">
+  <title>Document</title>
+</head>
+<body>
+  <h2>Blog posts</h2>
+  <button data-id="display-posts-button">Show posts</button>
+  <select data-id="sort-posts" class="hidden">
+    <option value="unsorted">Sort posts</option>
+    <Option value="a-to-z">Alphabetically (A-Z)</Option>
+    <Option value="z-to-a">Alphabetically (Z-A)</Option>
+  </select>
+  <div data-id="posts-container"></div>
+  <script src="../scripts/posts.js"></script>
+</body>
+</html>
