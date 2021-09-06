@@ -6,6 +6,8 @@ const init = () => {
   const postsContainer = document.querySelector('[data-id="posts-container"]');
 
   let posts = [];
+  let userPosts = [];
+  let isUserView = false;
 
   const getPosts = async () => {
     try {
@@ -20,6 +22,11 @@ const init = () => {
   };
 
   const displayPosts = async () => {
+    if (isUserView) {
+      isUserView = false;
+      sortPostsSelect.value = "unsorted"
+    }
+
     await getPosts();
     createCards(posts);
     displayPostsButton.classList.add("hidden");
@@ -27,6 +34,7 @@ const init = () => {
   };
 
   const createCards = (array) => {
+    postsContainer.replaceChildren();
     array.forEach((element) => {
       const card = document.createElement("div");
       const title = document.createElement("h3");
@@ -49,8 +57,8 @@ const init = () => {
     });
   };
 
-  const handleSort = (event) => {
-    let sortedPosts = [...posts];
+  const handleSort = (event, array) => {
+    let sortedPosts = [...array];
 
     if (event.target.value === "a-to-z") {
       sortedPosts.sort((a, b) => a.title.localeCompare(b.title));
@@ -60,21 +68,25 @@ const init = () => {
       sortedPosts.sort((a, b) => b.title.localeCompare(a.title));
     }
 
-    postsContainer.replaceChildren();
     createCards(sortedPosts);
   };
 
   const showUserPosts = (event) => {
-    const filteredPosts = [...posts].filter(
+    isUserView = true;
+    userPosts = [...posts].filter(
       (post) => post.userId === Number(event.target.dataset.user)
     );
 
-    postsContainer.replaceChildren();
-    createCards(filteredPosts);
+    createCards(userPosts);
+    sortPostsSelect.value = "unsorted";
+    displayPostsButton.classList.remove("hidden");
+    displayPostsButton.textContent = "Go back to all posts";
   };
 
   displayPostsButton.addEventListener("click", displayPosts);
-  sortPostsSelect.addEventListener("change", handleSort);
+  sortPostsSelect.addEventListener("change", (event) => {
+    isUserView ? handleSort(event, userPosts) : handleSort(event, posts);
+  });
 };
 
 window.addEventListener("DOMContentLoaded", init);
